@@ -1,3 +1,3 @@
 ## Overview
 
-`jennah` is an opinionated, workload deployment platform for the cloud.
+`jennah` is an opinionated, workload deployment platform for the cloud. Internal to Alphaus.
