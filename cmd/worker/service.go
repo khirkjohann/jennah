@@ -13,10 +13,12 @@ import (
 	"github.com/google/uuid"
 
 	jennahv1 "github.com/alphauslabs/jennah/gen/proto"
+	"github.com/alphauslabs/jennah/gen/proto/jennahv1connect"
 	"github.com/alphauslabs/jennah/internal/database"
 )
 
 type WorkerServer struct {
+	jennahv1connect.UnimplementedDeploymentServiceHandler
 	dbClient    *database.Client
 	batchClient *batch.Client
 	projectId   string
@@ -170,9 +172,9 @@ func (s *WorkerServer) createGCPBatchJob(
 	return s.batchClient.CreateJob(ctx, req)
 }
 
-func (s *WorkerServer) GetCurrentTenant(
-	ctx context.Context,
-	req *connect.Request[jennahv1.GetCurrentTenantRequest],
-) (*connect.Response[jennahv1.GetCurrentTenantResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("GetCurrentTenant is not implemented in WorkerService"))
-}
+// func (s *WorkerServer) GetCurrentTenant(
+// 	ctx context.Context,
+// 	req *connect.Request[jennahv1.GetCurrentTenantRequest],
+// ) (*connect.Response[jennahv1.GetCurrentTenantResponse], error) {
+// 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("GetCurrentTenant is not implemented in WorkerService"))
+// }
