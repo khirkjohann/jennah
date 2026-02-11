@@ -9,10 +9,11 @@ option go_package = "github.com/alphauslabs/jennah/gen/proto;jennahv1";
 service DeploymentService {
   rpc SubmitJob(SubmitJobRequest) returns (SubmitJobResponse);
   rpc ListJobs(ListJobsRequest) returns (ListJobsResponse);
+  rpc GetCurrentTenant(GetCurrentTenantRequest) returns (GetCurrentTenantResponse);
 }
 
+
 message SubmitJobRequest {
-  string tenant_id = 1;
   string image_uri = 2;
   map<string, string> env_vars = 3; // Example: { "DB_HOST": "10.0.0.1", "DEBUG": "true" }
 }
@@ -24,7 +25,6 @@ message SubmitJobResponse {
 }
 
 message ListJobsRequest {
-  string tenant_id = 1;
 }
 
 message ListJobsResponse {
@@ -37,4 +37,14 @@ message Job {
   string image_uri = 3;
   string status = 4;
   string created_at = 5;
+}
+
+message GetCurrentTenantRequest {
+}
+
+message GetCurrentTenantResponse {
+  string tenant_id = 1;
+  string user_email = 2;
+  string oauth_provider = 3;  // "google", "github"
+  string created_at = 4;
 }
