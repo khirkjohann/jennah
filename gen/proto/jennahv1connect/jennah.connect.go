@@ -39,12 +39,16 @@ const (
 	// DeploymentServiceListJobsProcedure is the fully-qualified name of the DeploymentService's
 	// ListJobs RPC.
 	DeploymentServiceListJobsProcedure = "/jennah.v1.DeploymentService/ListJobs"
+	// DeploymentServiceGetCurrentTenantProcedure is the fully-qualified name of the DeploymentService's
+	// GetCurrentTenant RPC.
+	DeploymentServiceGetCurrentTenantProcedure = "/jennah.v1.DeploymentService/GetCurrentTenant"
 )
 
 // DeploymentServiceClient is a client for the jennah.v1.DeploymentService service.
 type DeploymentServiceClient interface {
 	SubmitJob(context.Context, *connect.Request[proto.SubmitJobRequest]) (*connect.Response[proto.SubmitJobResponse], error)
 	ListJobs(context.Context, *connect.Request[proto.ListJobsRequest]) (*connect.Response[proto.ListJobsResponse], error)
+	GetCurrentTenant(context.Context, *connect.Request[proto.GetCurrentTenantRequest]) (*connect.Response[proto.GetCurrentTenantResponse], error)
 }
 
 // NewDeploymentServiceClient constructs a client for the jennah.v1.DeploymentService service. By
@@ -70,13 +74,20 @@ func NewDeploymentServiceClient(httpClient connect.HTTPClient, baseURL string, o
 			connect.WithSchema(deploymentServiceMethods.ByName("ListJobs")),
 			connect.WithClientOptions(opts...),
 		),
+		getCurrentTenant: connect.NewClient[proto.GetCurrentTenantRequest, proto.GetCurrentTenantResponse](
+			httpClient,
+			baseURL+DeploymentServiceGetCurrentTenantProcedure,
+			connect.WithSchema(deploymentServiceMethods.ByName("GetCurrentTenant")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // deploymentServiceClient implements DeploymentServiceClient.
 type deploymentServiceClient struct {
-	submitJob *connect.Client[proto.SubmitJobRequest, proto.SubmitJobResponse]
-	listJobs  *connect.Client[proto.ListJobsRequest, proto.ListJobsResponse]
+	submitJob        *connect.Client[proto.SubmitJobRequest, proto.SubmitJobResponse]
+	listJobs         *connect.Client[proto.ListJobsRequest, proto.ListJobsResponse]
+	getCurrentTenant *connect.Client[proto.GetCurrentTenantRequest, proto.GetCurrentTenantResponse]
 }
 
 // SubmitJob calls jennah.v1.DeploymentService.SubmitJob.
@@ -89,10 +100,16 @@ func (c *deploymentServiceClient) ListJobs(ctx context.Context, req *connect.Req
 	return c.listJobs.CallUnary(ctx, req)
 }
 
+// GetCurrentTenant calls jennah.v1.DeploymentService.GetCurrentTenant.
+func (c *deploymentServiceClient) GetCurrentTenant(ctx context.Context, req *connect.Request[proto.GetCurrentTenantRequest]) (*connect.Response[proto.GetCurrentTenantResponse], error) {
+	return c.getCurrentTenant.CallUnary(ctx, req)
+}
+
 // DeploymentServiceHandler is an implementation of the jennah.v1.DeploymentService service.
 type DeploymentServiceHandler interface {
 	SubmitJob(context.Context, *connect.Request[proto.SubmitJobRequest]) (*connect.Response[proto.SubmitJobResponse], error)
 	ListJobs(context.Context, *connect.Request[proto.ListJobsRequest]) (*connect.Response[proto.ListJobsResponse], error)
+	GetCurrentTenant(context.Context, *connect.Request[proto.GetCurrentTenantRequest]) (*connect.Response[proto.GetCurrentTenantResponse], error)
 }
 
 // NewDeploymentServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -114,12 +131,20 @@ func NewDeploymentServiceHandler(svc DeploymentServiceHandler, opts ...connect.H
 		connect.WithSchema(deploymentServiceMethods.ByName("ListJobs")),
 		connect.WithHandlerOptions(opts...),
 	)
+	deploymentServiceGetCurrentTenantHandler := connect.NewUnaryHandler(
+		DeploymentServiceGetCurrentTenantProcedure,
+		svc.GetCurrentTenant,
+		connect.WithSchema(deploymentServiceMethods.ByName("GetCurrentTenant")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/jennah.v1.DeploymentService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case DeploymentServiceSubmitJobProcedure:
 			deploymentServiceSubmitJobHandler.ServeHTTP(w, r)
 		case DeploymentServiceListJobsProcedure:
 			deploymentServiceListJobsHandler.ServeHTTP(w, r)
+		case DeploymentServiceGetCurrentTenantProcedure:
+			deploymentServiceGetCurrentTenantHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -135,4 +160,8 @@ func (UnimplementedDeploymentServiceHandler) SubmitJob(context.Context, *connect
 
 func (UnimplementedDeploymentServiceHandler) ListJobs(context.Context, *connect.Request[proto.ListJobsRequest]) (*connect.Response[proto.ListJobsResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("jennah.v1.DeploymentService.ListJobs is not implemented"))
+}
+
+func (UnimplementedDeploymentServiceHandler) GetCurrentTenant(context.Context, *connect.Request[proto.GetCurrentTenantRequest]) (*connect.Response[proto.GetCurrentTenantResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("jennah.v1.DeploymentService.GetCurrentTenant is not implemented"))
 }
