@@ -46,7 +46,7 @@ func main() {
 	workerServer := &WorkerServer{
 		dbClient:    dbClient,
 		batchClient: batchClient,
-		projectID:   projectID,
+		projectId:   projectID,
 		region:      region,
 	}
 
@@ -95,17 +95,4 @@ func main() {
 	}
 
 	log.Println("Worker stopped")
-}
-
-// WorkerServer implements the DeploymentService
-type WorkerServer struct {
-	dbClient    *database.Client
-	batchClient *batch.Client
-	projectID   string
-	region      string
-}
-
-// GetCurrentTenant implements the DeploymentServiceHandler interface
-func (ws *WorkerServer) GetCurrentTenant(ctx context.Context, req *connect.Request[jennahv1.GetCurrentTenantRequest]) (*connect.Response[jennahv1.GetCurrentTenantResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, fmt.Errorf("GetCurrentTenant not yet implemented"))
 }
