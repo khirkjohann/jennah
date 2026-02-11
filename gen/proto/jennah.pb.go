@@ -23,7 +23,6 @@ const (
 
 type SubmitJobRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	TenantId      string                 `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
 	ImageUri      string                 `protobuf:"bytes,2,opt,name=image_uri,json=imageUri,proto3" json:"image_uri,omitempty"`
 	EnvVars       map[string]string      `protobuf:"bytes,3,rep,name=env_vars,json=envVars,proto3" json:"env_vars,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // Example: { "DB_HOST": "10.0.0.1", "DEBUG": "true" }
 	unknownFields protoimpl.UnknownFields
@@ -58,13 +57,6 @@ func (x *SubmitJobRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SubmitJobRequest.ProtoReflect.Descriptor instead.
 func (*SubmitJobRequest) Descriptor() ([]byte, []int) {
 	return file_proto_jennah_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *SubmitJobRequest) GetTenantId() string {
-	if x != nil {
-		return x.TenantId
-	}
-	return ""
 }
 
 func (x *SubmitJobRequest) GetImageUri() string {
@@ -143,7 +135,6 @@ func (x *SubmitJobResponse) GetWorkerAssigned() string {
 
 type ListJobsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	TenantId      string                 `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -176,13 +167,6 @@ func (x *ListJobsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use ListJobsRequest.ProtoReflect.Descriptor instead.
 func (*ListJobsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_jennah_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *ListJobsRequest) GetTenantId() string {
-	if x != nil {
-		return x.TenantId
-	}
-	return ""
 }
 
 type ListJobsResponse struct {
@@ -305,13 +289,116 @@ func (x *Job) GetCreatedAt() string {
 	return ""
 }
 
+type GetCurrentTenantRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetCurrentTenantRequest) Reset() {
+	*x = GetCurrentTenantRequest{}
+	mi := &file_proto_jennah_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetCurrentTenantRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetCurrentTenantRequest) ProtoMessage() {}
+
+func (x *GetCurrentTenantRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_jennah_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetCurrentTenantRequest.ProtoReflect.Descriptor instead.
+func (*GetCurrentTenantRequest) Descriptor() ([]byte, []int) {
+	return file_proto_jennah_proto_rawDescGZIP(), []int{5}
+}
+
+type GetCurrentTenantResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TenantId      string                 `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
+	UserEmail     string                 `protobuf:"bytes,2,opt,name=user_email,json=userEmail,proto3" json:"user_email,omitempty"`
+	OauthProvider string                 `protobuf:"bytes,3,opt,name=oauth_provider,json=oauthProvider,proto3" json:"oauth_provider,omitempty"` // "google", "github"
+	CreatedAt     string                 `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetCurrentTenantResponse) Reset() {
+	*x = GetCurrentTenantResponse{}
+	mi := &file_proto_jennah_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetCurrentTenantResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetCurrentTenantResponse) ProtoMessage() {}
+
+func (x *GetCurrentTenantResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_jennah_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetCurrentTenantResponse.ProtoReflect.Descriptor instead.
+func (*GetCurrentTenantResponse) Descriptor() ([]byte, []int) {
+	return file_proto_jennah_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *GetCurrentTenantResponse) GetTenantId() string {
+	if x != nil {
+		return x.TenantId
+	}
+	return ""
+}
+
+func (x *GetCurrentTenantResponse) GetUserEmail() string {
+	if x != nil {
+		return x.UserEmail
+	}
+	return ""
+}
+
+func (x *GetCurrentTenantResponse) GetOauthProvider() string {
+	if x != nil {
+		return x.OauthProvider
+	}
+	return ""
+}
+
+func (x *GetCurrentTenantResponse) GetCreatedAt() string {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return ""
+}
+
 var File_proto_jennah_proto protoreflect.FileDescriptor
 
 const file_proto_jennah_proto_rawDesc = "" +
 	"\n" +
-	"\x12proto/jennah.proto\x12\tjennah.v1\"\xcd\x01\n" +
+	"\x12proto/jennah.proto\x12\tjennah.v1\"\xb0\x01\n" +
 	"\x10SubmitJobRequest\x12\x1b\n" +
-	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x1b\n" +
 	"\timage_uri\x18\x02 \x01(\tR\bimageUri\x12C\n" +
 	"\benv_vars\x18\x03 \x03(\v2(.jennah.v1.SubmitJobRequest.EnvVarsEntryR\aenvVars\x1a:\n" +
 	"\fEnvVarsEntry\x12\x10\n" +
@@ -320,9 +407,8 @@ const file_proto_jennah_proto_rawDesc = "" +
 	"\x11SubmitJobResponse\x12\x15\n" +
 	"\x06job_id\x18\x01 \x01(\tR\x05jobId\x12\x16\n" +
 	"\x06status\x18\x02 \x01(\tR\x06status\x12'\n" +
-	"\x0fworker_assigned\x18\x03 \x01(\tR\x0eworkerAssigned\".\n" +
-	"\x0fListJobsRequest\x12\x1b\n" +
-	"\ttenant_id\x18\x01 \x01(\tR\btenantId\"6\n" +
+	"\x0fworker_assigned\x18\x03 \x01(\tR\x0eworkerAssigned\"\x11\n" +
+	"\x0fListJobsRequest\"6\n" +
 	"\x10ListJobsResponse\x12\"\n" +
 	"\x04jobs\x18\x01 \x03(\v2\x0e.jennah.v1.JobR\x04jobs\"\x8d\x01\n" +
 	"\x03Job\x12\x15\n" +
@@ -331,10 +417,19 @@ const file_proto_jennah_proto_rawDesc = "" +
 	"\timage_uri\x18\x03 \x01(\tR\bimageUri\x12\x16\n" +
 	"\x06status\x18\x04 \x01(\tR\x06status\x12\x1d\n" +
 	"\n" +
-	"created_at\x18\x05 \x01(\tR\tcreatedAt2\xa0\x01\n" +
+	"created_at\x18\x05 \x01(\tR\tcreatedAt\"\x19\n" +
+	"\x17GetCurrentTenantRequest\"\x9c\x01\n" +
+	"\x18GetCurrentTenantResponse\x12\x1b\n" +
+	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x1d\n" +
+	"\n" +
+	"user_email\x18\x02 \x01(\tR\tuserEmail\x12%\n" +
+	"\x0eoauth_provider\x18\x03 \x01(\tR\roauthProvider\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x04 \x01(\tR\tcreatedAt2\xfd\x01\n" +
 	"\x11DeploymentService\x12F\n" +
 	"\tSubmitJob\x12\x1b.jennah.v1.SubmitJobRequest\x1a\x1c.jennah.v1.SubmitJobResponse\x12C\n" +
-	"\bListJobs\x12\x1a.jennah.v1.ListJobsRequest\x1a\x1b.jennah.v1.ListJobsResponseB2Z0github.com/alphauslabs/jennah/gen/proto;jennahv1b\x06proto3"
+	"\bListJobs\x12\x1a.jennah.v1.ListJobsRequest\x1a\x1b.jennah.v1.ListJobsResponse\x12[\n" +
+	"\x10GetCurrentTenant\x12\".jennah.v1.GetCurrentTenantRequest\x1a#.jennah.v1.GetCurrentTenantResponseB2Z0github.com/alphauslabs/jennah/gen/proto;jennahv1b\x06proto3"
 
 var (
 	file_proto_jennah_proto_rawDescOnce sync.Once
@@ -348,24 +443,28 @@ func file_proto_jennah_proto_rawDescGZIP() []byte {
 	return file_proto_jennah_proto_rawDescData
 }
 
-var file_proto_jennah_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_proto_jennah_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_proto_jennah_proto_goTypes = []any{
-	(*SubmitJobRequest)(nil),  // 0: jennah.v1.SubmitJobRequest
-	(*SubmitJobResponse)(nil), // 1: jennah.v1.SubmitJobResponse
-	(*ListJobsRequest)(nil),   // 2: jennah.v1.ListJobsRequest
-	(*ListJobsResponse)(nil),  // 3: jennah.v1.ListJobsResponse
-	(*Job)(nil),               // 4: jennah.v1.Job
-	nil,                       // 5: jennah.v1.SubmitJobRequest.EnvVarsEntry
+	(*SubmitJobRequest)(nil),         // 0: jennah.v1.SubmitJobRequest
+	(*SubmitJobResponse)(nil),        // 1: jennah.v1.SubmitJobResponse
+	(*ListJobsRequest)(nil),          // 2: jennah.v1.ListJobsRequest
+	(*ListJobsResponse)(nil),         // 3: jennah.v1.ListJobsResponse
+	(*Job)(nil),                      // 4: jennah.v1.Job
+	(*GetCurrentTenantRequest)(nil),  // 5: jennah.v1.GetCurrentTenantRequest
+	(*GetCurrentTenantResponse)(nil), // 6: jennah.v1.GetCurrentTenantResponse
+	nil,                              // 7: jennah.v1.SubmitJobRequest.EnvVarsEntry
 }
 var file_proto_jennah_proto_depIdxs = []int32{
-	5, // 0: jennah.v1.SubmitJobRequest.env_vars:type_name -> jennah.v1.SubmitJobRequest.EnvVarsEntry
+	7, // 0: jennah.v1.SubmitJobRequest.env_vars:type_name -> jennah.v1.SubmitJobRequest.EnvVarsEntry
 	4, // 1: jennah.v1.ListJobsResponse.jobs:type_name -> jennah.v1.Job
 	0, // 2: jennah.v1.DeploymentService.SubmitJob:input_type -> jennah.v1.SubmitJobRequest
 	2, // 3: jennah.v1.DeploymentService.ListJobs:input_type -> jennah.v1.ListJobsRequest
-	1, // 4: jennah.v1.DeploymentService.SubmitJob:output_type -> jennah.v1.SubmitJobResponse
-	3, // 5: jennah.v1.DeploymentService.ListJobs:output_type -> jennah.v1.ListJobsResponse
-	4, // [4:6] is the sub-list for method output_type
-	2, // [2:4] is the sub-list for method input_type
+	5, // 4: jennah.v1.DeploymentService.GetCurrentTenant:input_type -> jennah.v1.GetCurrentTenantRequest
+	1, // 5: jennah.v1.DeploymentService.SubmitJob:output_type -> jennah.v1.SubmitJobResponse
+	3, // 6: jennah.v1.DeploymentService.ListJobs:output_type -> jennah.v1.ListJobsResponse
+	6, // 7: jennah.v1.DeploymentService.GetCurrentTenant:output_type -> jennah.v1.GetCurrentTenantResponse
+	5, // [5:8] is the sub-list for method output_type
+	2, // [2:5] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
 	2, // [2:2] is the sub-list for extension extendee
 	0, // [0:2] is the sub-list for field type_name
@@ -382,7 +481,7 @@ func file_proto_jennah_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_jennah_proto_rawDesc), len(file_proto_jennah_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
