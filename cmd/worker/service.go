@@ -58,7 +58,7 @@ func (s *WorkerServer) SubmitJob(
 	log.Printf("Full GCP Batch resource name: %s", gcpBatchJobName)
 
 	// Insert job record with both identifiers
-	err := s.dbClient.InsertJob(ctx, tenantId, internalJobID, req.Msg.ImageUri, []string{}, gcpBatchJobName)
+	err := s.dbClient.InsertJob(ctx, tenantId, internalJobID, req.Msg.ImageUri, []string{})
 	if err != nil {
 		log.Printf("Error inserting job to database: %v", err)
 		return nil, connect.NewError(
