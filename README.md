@@ -9,3 +9,10 @@
  ```bash
    $ make generate
 ```
+
+#### Build the gateway binary and run:
+```bash
+  $ cd cmd/gateway
+  $ make build
+  $ ./bin/gateway -h
+```

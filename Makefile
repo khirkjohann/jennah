@@ -1,2 +1,2 @@
- generate:
+generate:
 	buf generate --exclude-path vendor/
