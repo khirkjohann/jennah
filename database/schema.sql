@@ -16,12 +16,17 @@ CREATE TABLE Jobs (
   ImageUri STRING(1024),
   Commands ARRAY<STRING(MAX)>,
   CreatedAt TIMESTAMP NOT NULL OPTIONS (allow_commit_timestamp=true),
+  UpdatedAt TIMESTAMP NOT NULL OPTIONS (allow_commit_timestamp=true),
+  -- Job Lifecycle Timestamps
   ScheduledAt TIMESTAMP,
   StartedAt TIMESTAMP,
   CompletedAt TIMESTAMP,
-  UpdatedAt TIMESTAMP NOT NULL OPTIONS (allow_commit_timestamp=true),
+  -- Retry and Error Handling
+  RetryCount INT64 NOT NULL DEFAULT (0),
+  MaxRetries INT64 NOT NULL DEFAULT (3),
   ErrorMessage STRING(MAX),
-  RetryCount INT64 DEFAULT (0),
+  -- GCP Batch Integration
+  GcpBatchJobName STRING(1024),
 ) PRIMARY KEY (TenantId, JobId),
   INTERLEAVE IN PARENT Tenants ON DELETE CASCADE;
 
@@ -34,7 +39,7 @@ CREATE TABLE JobStateTransitions (
   FromStatus STRING(50),
   ToStatus STRING(50) NOT NULL,
   TransitionedAt TIMESTAMP NOT NULL OPTIONS (allow_commit_timestamp=true),
-  Notes STRING(MAX),
+  Reason STRING(MAX),
 ) PRIMARY KEY (TenantId, JobId, TransitionId),
   INTERLEAVE IN PARENT Jobs ON DELETE CASCADE;
 

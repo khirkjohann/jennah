@@ -5,13 +5,12 @@ This directory contains the database schema for Cloud Spanner.
 ## Files
 
 - **schema.sql** - DDL definitions for Tenants, Jobs, and JobStateTransitions tables
-- **migrate-oauth.sql** - Migration script to add OAuth fields to existing database
-- **migrate-lifecycle.sql** - Migration script to add job lifecycle tracking
+- **migrate-batch-integration.sql** - Migration script to add GCP Batch integration fields
 
 ## Setup Status
 
-✅ **Complete** - Tables have been created in the `main` database  
-⚠️ **Migration Required** - Run migrate-oauth.sql and migrate-lifecycle.sql to add new fields
+✅ **Complete** - Tables created in `main` database with OAuth and lifecycle tracking  
+⚠️ **Migration Required** - Run migrate-batch-integration.sql to add MaxRetries and GcpBatchJobName
 
 ## Schema Overview
 
@@ -38,12 +37,14 @@ Stores deployment job information with lifecycle tracking, interleaved with Tena
 | ImageUri | STRING(1024) | Container image to run |
 | Commands | ARRAY<STRING> | Commands to execute |
 | CreatedAt | TIMESTAMP | Job creation timestamp |
+| UpdatedAt | TIMESTAMP | Last update timestamp |
 | ScheduledAt | TIMESTAMP | When job was scheduled (PENDING → SCHEDULED) |
 | StartedAt | TIMESTAMP | When job execution began (SCHEDULED → RUNNING) |
 | CompletedAt | TIMESTAMP | When job finished (→ COMPLETED/FAILED/CANCELLED) |
-| UpdatedAt | TIMESTAMP | Last update timestamp |
+| RetryCount | INT64 | Number of retry attempts (default: 0) |
+| MaxRetries | INT64 | Maximum retry attempts allowed (default: 3) |
 | ErrorMessage | STRING | Error details (nullable) |
-| RetryCount | INT64 | Number of retry attempts |
+| GcpBatchJobName | STRING(1024) | GCP Batch job resource name (nullable) |
 
 ### JobStateTransitions Table
 Tracks all state changes for audit trail and debugging, interleaved with Jobs.
@@ -56,7 +57,7 @@ Tracks all state changes for audit trail and debugging, interleaved with Jobs.
 | FromStatus | STRING(50) | Previous status (nullable for initial state) |
 | ToStatus | STRING(50) | New status |
 | TransitionedAt | TIMESTAMP | When transition occurred |
-| Notes | STRING | Additional context (nullable) |
+| Reason | STRING | Error details, cancellation reason, etc. (nullable) |
 
 ### Job Lifecycle Flow
 
@@ -84,25 +85,22 @@ PENDING → SCHEDULED → RUNNING → COMPLETED
 
 ## Migration Instructions
 
-To update the existing database:
+To add GCP Batch integration fields to existing database:
 
-**1. Add OAuth fields:**
 ```bash
 gcloud spanner databases ddl update main \
   --instance=alphaus-dev \
   --project=labs-169405 \
-  --ddl-file=migrate-oauth.sql
+  --ddl-file=migrate-batch-integration.sql
 ```
 
-**2. Add lifecycle tracking:**
-```bash
-gcloud spanner databases ddl update main \
-  --instance=alphaus-dev \
-  --project=labs-169405 \
-  --ddl-file=migrate-lifecycle.sql
-```
+**Or run these DDL statements in Cloud Console:**
 
-Or run each statement individually in Cloud Console.
+```sql
+ALTER TABLE Jobs ADD COLUMN MaxRetries INT64 NOT NULL DEFAULT (3);
+ALTER TABLE Jobs ADD COLUMN GcpBatchJobName STRING(1024);
+UPDATE Jobs SET MaxRetries = 3 WHERE MaxRetries IS NULL;
+```
 
 ## Connection Information
 

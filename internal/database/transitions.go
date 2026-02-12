@@ -9,11 +9,11 @@ import (
 )
 
 // RecordStateTransition creates a new state transition record
-func (c *Client) RecordStateTransition(ctx context.Context, tenantID, jobID, transitionID string, fromStatus *string, toStatus string, notes *string) error {
+func (c *Client) RecordStateTransition(ctx context.Context, tenantID, jobID, transitionID string, fromStatus *string, toStatus string, reason *string) error {
 	_, err := c.client.Apply(ctx, []*spanner.Mutation{
 		spanner.Insert("JobStateTransitions",
-			[]string{"TenantId", "JobId", "TransitionId", "FromStatus", "ToStatus", "TransitionedAt", "Notes"},
-			[]interface{}{tenantID, jobID, transitionID, fromStatus, toStatus, spanner.CommitTimestamp, notes},
+			[]string{"TenantId", "JobId", "TransitionId", "FromStatus", "ToStatus", "TransitionedAt", "Reason"},
+			[]interface{}{tenantID, jobID, transitionID, fromStatus, toStatus, spanner.CommitTimestamp, reason},
 		),
 	})
 	if err != nil {
@@ -25,7 +25,7 @@ func (c *Client) RecordStateTransition(ctx context.Context, tenantID, jobID, tra
 // GetJobTransitions retrieves all state transitions for a job
 func (c *Client) GetJobTransitions(ctx context.Context, tenantID, jobID string) ([]*JobStateTransition, error) {
 	stmt := spanner.Statement{
-		SQL: `SELECT TenantId, JobId, TransitionId, FromStatus, ToStatus, TransitionedAt, Notes 
+		SQL: `SELECT TenantId, JobId, TransitionId, FromStatus, ToStatus, TransitionedAt, Reason 
 		      FROM JobStateTransitions 
 		      WHERE TenantId = @tenantId AND JobId = @jobId 
 		      ORDER BY TransitionedAt DESC`,

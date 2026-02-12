@@ -14,18 +14,20 @@ type Tenant struct {
 
 // Job represents a deployment job
 type Job struct {
-	TenantId     string     `spanner:"TenantId"`
-	JobId        string     `spanner:"JobId"`
-	Status       string     `spanner:"Status"`
-	ImageUri     string     `spanner:"ImageUri"`
-	Commands     []string   `spanner:"Commands"`
-	CreatedAt    time.Time  `spanner:"CreatedAt"`
-	ScheduledAt  *time.Time `spanner:"ScheduledAt"`
-	StartedAt    *time.Time `spanner:"StartedAt"`
-	CompletedAt  *time.Time `spanner:"CompletedAt"`
-	UpdatedAt    time.Time  `spanner:"UpdatedAt"`
-	ErrorMessage *string    `spanner:"ErrorMessage"`
-	RetryCount   int64      `spanner:"RetryCount"`
+	TenantId        string     `spanner:"TenantId"`
+	JobId           string     `spanner:"JobId"`
+	Status          string     `spanner:"Status"`
+	ImageUri        string     `spanner:"ImageUri"`
+	Commands        []string   `spanner:"Commands"`
+	CreatedAt       time.Time  `spanner:"CreatedAt"`
+	UpdatedAt       time.Time  `spanner:"UpdatedAt"`
+	ScheduledAt     *time.Time `spanner:"ScheduledAt"`
+	StartedAt       *time.Time `spanner:"StartedAt"`
+	CompletedAt     *time.Time `spanner:"CompletedAt"`
+	RetryCount      int64      `spanner:"RetryCount"`
+	MaxRetries      int64      `spanner:"MaxRetries"`
+	ErrorMessage    *string    `spanner:"ErrorMessage"`
+	GcpBatchJobName *string    `spanner:"GcpBatchJobName"`
 }
 
 // JobStateTransition tracks state changes for audit trail
@@ -36,7 +38,7 @@ type JobStateTransition struct {
 	FromStatus     *string   `spanner:"FromStatus"`
 	ToStatus       string    `spanner:"ToStatus"`
 	TransitionedAt time.Time `spanner:"TransitionedAt"`
-	Notes          *string   `spanner:"Notes"`
+	Reason         *string   `spanner:"Reason"`
 }
 
 // JobStatus constants
