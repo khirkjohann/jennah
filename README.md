@@ -12,8 +12,7 @@
 
 #### Build the gateway binary and run:
 ```bash
-  $ cd cmd/gateway
-  $ make build
+  $ make gw-build
   $ ./bin/gateway -h
 ```
 #### Build gateway Docker image:
